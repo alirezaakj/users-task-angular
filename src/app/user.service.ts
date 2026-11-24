@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   INITIAL_USERS,
+  USER_DEPARTMENTS,
+  USER_ROLES,
   User,
   UserDraft,
   UserFilters,
@@ -19,6 +21,12 @@ export class UserService {
 
   getAll(): User[] {
     return this.users.map((user) => ({ ...user }));
+  }
+
+  replaceAll(users: readonly User[]): void {
+    this.users = users.map((user) => ({ ...user }));
+    this.deletedUser = null;
+    this.persist();
   }
 
   getActiveCount(): number {
@@ -103,13 +111,12 @@ export class UserService {
       const stored = localStorage.getItem(this.storageKey);
       if (!stored) return INITIAL_USERS.map((user) => ({ ...user }));
 
-      const parsed = JSON.parse(stored) as Partial<User>[];
+      const parsed: unknown = JSON.parse(stored);
       if (!Array.isArray(parsed)) return INITIAL_USERS.map((user) => ({ ...user }));
 
-      return parsed.map((user) => ({
-        ...user,
-        department: user.department ?? 'فناوری اطلاعات',
-      })) as User[];
+      return parsed
+        .map((record) => this.parseStoredUser(record))
+        .filter((user): user is User => user !== null);
     } catch {
       return INITIAL_USERS.map((user) => ({ ...user }));
     }
@@ -129,5 +136,32 @@ export class UserService {
       name: draft.name.trim(),
       email: draft.email.trim().toLocaleLowerCase('en'),
     };
+  }
+
+  private parseStoredUser(value: unknown): User | null {
+    if (typeof value !== 'object' || value === null) return null;
+    const record = value as Record<string, unknown>;
+    const department = record['department'] ?? 'فناوری اطلاعات';
+    const isValid =
+      Number.isInteger(record['id']) && Number(record['id']) > 0 &&
+      typeof record['name'] === 'string' && Boolean(record['name'].trim()) &&
+      typeof record['email'] === 'string' && this.isEmail(record['email']) &&
+      USER_ROLES.includes(record['role'] as User['role']) &&
+      USER_DEPARTMENTS.includes(department as User['department']) &&
+      typeof record['active'] === 'boolean';
+
+    if (!isValid) return null;
+    return {
+      id: Number(record['id']),
+      name: (record['name'] as string).trim(),
+      email: (record['email'] as string).trim().toLocaleLowerCase('en'),
+      role: record['role'] as User['role'],
+      department: department as User['department'],
+      active: record['active'] as boolean,
+    };
+  }
+
+  private isEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
   }
 }

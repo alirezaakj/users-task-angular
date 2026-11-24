@@ -1,1 +1,8 @@
 @import '@fontsource/vazirmatn/400.css';
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  font-family: "Vazirmatn", "Segoe UI", Tahoma, sans-serif;
+}

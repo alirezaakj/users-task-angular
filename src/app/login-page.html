@@ -1,0 +1,17 @@
+<main class="auth-page" dir="rtl">
+  <section class="auth-card">
+    <span class="auth-mark" aria-hidden="true">کاربران</span>
+    <p class="eyebrow">پنل مدیریت</p>
+    <h1>مدیریت کاربران</h1>
+    <p class="auth-description">برای ادامه، نوع دسترسی را انتخاب کنید.</p>
+
+    <button type="button" (click)="chooseRole('admin')">
+      ورود به‌عنوان مدیر سیستم
+    </button>
+    <button class="quiet-button" type="button" (click)="chooseRole('user')">
+      ورود به‌عنوان کاربر عادی
+    </button>
+
+    <small>ورود این نسخه نمایشی است و به حساب واقعی متصل نیست.</small>
+  </section>
+</main>

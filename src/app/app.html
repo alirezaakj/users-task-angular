@@ -14,6 +14,10 @@
       <span aria-hidden="true">＋</span>
       افزودن کاربر
     </button>
+    <div class="session-actions">
+      <span>مدیر سیستم</span>
+      <button class="secondary-button" type="button" (click)="logout()">خروج</button>
+    </div>
   </header>
 
   <section class="stats" aria-label="آمار کاربران">
@@ -31,6 +35,22 @@
       <span>کاربران غیرفعال</span>
       <strong>{{ inactiveCount }}</strong>
     </article>
+  </section>
+
+  <section class="department-summary" aria-label="توزیع کاربران بر اساس واحد">
+    <div class="summary-heading">
+      <h2>ترکیب واحدها</h2>
+      <span>{{ overview.activePercent }}٪ حساب‌ها فعال‌اند</span>
+    </div>
+    @for (department of overview.departments; track department.name) {
+      <div class="department-row">
+        <span>{{ department.name }}</span>
+        <strong>{{ department.total }}</strong>
+        <span class="department-meter" [attr.aria-label]="department.share + '% از فهرست'">
+          <i [style.width.%]="department.share"></i>
+        </span>
+      </div>
+    }
   </section>
 
   <section class="toolbar">
@@ -57,6 +77,27 @@
     <button class="secondary-button" type="button" (click)="toggleSort()">
       مرتب‌سازی نام: {{ sortAscending ? 'الف تا ی' : 'ی تا الف' }}
     </button>
+    <button class="secondary-button" type="button" (click)="exportUsers()">
+      دریافت CSV
+    </button>
+    <label class="import-button">
+      واردکردن CSV
+      <input type="file" accept=".csv,text/csv" (change)="importUsers($event)" />
+    </label>
+  </section>
+
+  @if (csvMessage) {
+    <p class="csv-message" role="status">{{ csvMessage }}</p>
+  }
+  <section class="backup-actions" aria-label="پشتیبان‌گیری کاربران">
+    <button class="secondary-button" type="button" (click)="exportBackup()">
+      ذخیرهٔ پشتیبان JSON
+    </button>
+    <label class="import-button">
+      بازیابی از JSON
+      <input type="file" accept=".json,application/json" (change)="restoreBackup($event)" />
+    </label>
+    @if (backupMessage) { <span role="status">{{ backupMessage }}</span> }
   </section>
 
   @if (lastDeletedUser) {
@@ -204,6 +245,25 @@
       </table>
     </div>
   </section>
+
+  <details class="activity-card">
+    <summary>گزارش تغییرات اخیر ({{ activityLog.recent.length }})</summary>
+    @if (activityLog.recent.length) {
+      <ol>
+        @for (entry of activityLog.recent; track entry.id) {
+          <li>
+            <span>{{ entry.action }} کاربر «{{ entry.userName }}»</span>
+            <time [attr.datetime]="entry.createdAt">{{ entry.createdAt | date:'short' }}</time>
+          </li>
+        }
+      </ol>
+      <button class="secondary-button" type="button" (click)="clearActivityLog()">
+        پاک‌کردن گزارش
+      </button>
+    } @else {
+      <p>هنوز تغییری ثبت نشده است.</p>
+    }
+  </details>
 
   @if (selectedUser; as user) {
     <div class="dialog-backdrop" (click)="closeDetails()">
