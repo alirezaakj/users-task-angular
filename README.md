@@ -1,59 +1,92 @@
-# UserManagementApp
+# مدیریت کاربران
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.31.
+یک برنامه‌ی تک‌صفحه‌ای برای مرور و مدیریت اطلاعات کاربران. رابط کاربری فارسی و راست‌چین است. این پروژه برای تمرین Angular، TypeScript، فرم‌ها و اتصال داده به Template ساخته شده است.
 
-## Development server
+## تحلیل مسئله
 
-To start a local development server, run:
+### مسئله
+
+وقتی فهرست کاربران رشد می‌کند، پیدا کردن یک شخص و تشخیص نقش یا وضعیت او از روی فهرست خام دشوار می‌شود. همچنین اطلاعات باید از یک محل قابل‌فهم اضافه، اصلاح یا حذف شوند. بنابراین صفحه باید هم اطلاعات را منظم نمایش دهد و هم عملیات اصلی مدیریت کاربران را در همان جریان ساده در دسترس بگذارد.
+
+### نیازهای استخراج‌شده
+
+**نمایش اطلاعات:** برای هر کاربر شناسه، نام و نام خانوادگی، ایمیل، نقش، واحد سازمانی و وضعیت حساب نمایش داده می‌شود.
+
+**پیداکردن کاربر:** جست‌وجو با نام، ایمیل یا واحد سازمانی انجام می‌شود. فهرست را می‌توان هم‌زمان بر اساس نقش و وضعیت فعال/غیرفعال محدود کرد.
+
+**مدیریت اطلاعات:** کاربر می‌تواند رکوردی را اضافه کند، جزئیات آن را ببیند، اطلاعاتش را ویرایش کند یا پس از تأیید حذفش کند.
+
+### جریان‌های اصلی
+
+1. کاربر صفحه را باز می‌کند و فهرست و خلاصه‌ی تعداد کاربران را می‌بیند.
+2. با جست‌وجو، فیلتر نقش یا فیلتر وضعیت، فهرست را محدود می‌کند؛ مرتب‌سازی نام ترتیب نمایش را تغییر می‌دهد.
+3. برای افزودن یا ویرایش، فرم را باز می‌کند و اطلاعات را ثبت می‌کند. جدول و شمارنده‌ها پس از ثبت به‌روز می‌شوند.
+4. برای حذف، عملیات را تأیید می‌کند. پیام بازگردانی اجازه می‌دهد آخرین حذف را برگرداند.
+
+## مدل داده
+
+هر کاربر با این فیلدها نگه‌داری می‌شود:
+
+- `id`: شناسه‌ی یکتا برای ردیابی و عملیات روی ردیف
+- `name`: نام و نام خانوادگی
+- `email`: نشانی ایمیل
+- `role`: نقش کاری مانند مدیر سیستم، کارشناس یا پشتیبان
+- `department`: واحد سازمانی مانند فناوری اطلاعات، منابع انسانی، مالی یا پشتیبانی مشتریان
+- `active`: وضعیت حساب؛ `true` یعنی فعال و `false` یعنی غیرفعال
+
+نقش در این پروژه فقط اطلاعات شغلی است و برای تعیین سطح دسترسی استفاده نمی‌شود.
+
+## قابلیت‌های برنامه
+
+### هسته‌ی تسک
+
+- نمایش کاربران در جدول و نمایش جزئیات در پنجره‌ی همان صفحه
+- افزودن، ویرایش و حذف کاربران
+- جست‌وجو بر اساس نام، ایمیل و واحد سازمانی
+- فیلتر بر اساس نقش و وضعیت حساب
+- نمایش نقش‌ها با رنگ‌های متفاوت بر اساس سطح مسئولیت نمایشی
+- نمایش وضعیت فعال با سبز و غیرفعال با قرمز
+
+### انتخاب‌های تکمیلی این پیاده‌سازی
+
+- کارت‌های خلاصه برای تعداد کل، فعال و غیرفعال کاربران
+- مرتب‌سازی نام به دو جهت
+- برگرداندن آخرین کاربر حذف‌شده
+- نگه‌داری تغییرات در `localStorage` تا پس از تازه‌سازی صفحه باقی بمانند
+- پیام حالت خالی وقتی جست‌وجو یا فیلتر نتیجه‌ای ندارد
+
+## تصمیم‌های طراحی و فنی
+
+- از یک صفحه‌ی مدیریتی ساده استفاده شده تا فهرست و عملیات مرتبط در یک محل بمانند.
+- فرم مشترک برای افزودن و ویرایش به کار رفته تا فیلدها و رفتار ثبت تکراری نشوند.
+- `interface User` شکل داده را مشخص می‌کند و آرایه‌ی کاربران منبع داده‌ی رابط است.
+- `@for` ردیف‌ها را از روی آرایه می‌سازد و `track user.id` هر ردیف را با شناسه‌ی یکتا دنبال می‌کند.
+- `[(ngModel)]` ورودی‌های فرم، جست‌وجو و فیلترها را به داده‌ی کامپوننت متصل می‌کند.
+- `@if` فرم، جزئیات و پیام بازگردانی را فقط هنگام نیاز نمایش می‌دهد.
+- حذف با تأیید انجام می‌شود و کاربر حذف‌شده تا زمان اقدام بعدی برای بازگردانی در حافظه‌ی صفحه نگه داشته می‌شود.
+
+## محدوده و محدودیت‌ها
+
+- داده‌ها به API یا پایگاه داده‌ی سرور متصل نیستند؛ ذخیره‌سازی فقط در مرورگر فعلی و با `localStorage` است.
+- ورود، احراز هویت، سطح دسترسی و Route Guard جزو محدوده‌ی این تسک نیستند.
+- اگر داده‌های سایت از حافظه‌ی مرورگر پاک شوند، تغییرات محلی نیز پاک می‌شوند.
+- آواتارها و اتصال به سرویس واقعی کاربران در این نسخه پیاده نشده‌اند.
+
+## اجرا در محیط توسعه
+
+پیش‌نیاز: Node.js و npm
 
 ```bash
-ng serve
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+پس از اجرای فرمان، آدرس محلی نمایش‌داده‌شده در ترمینال را در مرورگر باز کنید.
 
-## Code scaffolding
+## فناوری‌ها
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Angular
+- TypeScript
+- Template-driven Forms (`FormsModule` و `ngModel`)
+- HTML و CSS
+- `localStorage`
