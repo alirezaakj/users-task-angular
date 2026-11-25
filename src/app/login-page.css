@@ -1,11 +1,12 @@
 :host { display: block; min-height: 100vh; }
 .auth-page { display: grid; min-height: 100vh; place-items: center; padding: 24px; background: #f2f7f5; }
 .auth-card { width: min(420px, 100%); padding: 36px; border: 1px solid #e0e7e4; border-radius: 14px; background: #fff; box-shadow: 0 12px 36px #183b3512; text-align: center; }
-.auth-mark { display: grid; width: 58px; height: 58px; place-items: center; margin: 0 auto 22px; border-radius: 15px; color: #147d73; background: #eaf3ef; font-size: 13px; font-weight: 700; }
+.auth-mark { display: grid; width: 58px; height: 58px; place-items: center; margin: 0 auto 22px; border: 1px solid #cfe1db; border-radius: 15px; color: #147d73; background: #eaf3ef; }
+.auth-mark svg { width: 31px; height: 31px; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .eyebrow { margin-bottom: 8px; color: #188477; font-size: 13px; font-weight: 700; }
 h1 { margin: 0 0 10px; color: #203d39; font-size: 26px; }
 .auth-description { margin-bottom: 24px; color: #66817d; }
-button { width: 100%; min-height: 46px; margin-top: 10px; border: 0; border-radius: 8px; color: #fff; background: #147d73; font: inherit; cursor: pointer; }
+button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 48px; margin-top: 10px; border: 0; border-radius: 8px; color: #fff; background: #147d73; font: inherit; cursor: pointer; }
 button:hover { background: #10665e; }
 button.quiet-button { color: #245b56; background: #e3efec; }
-small { display: block; margin-top: 20px; color: #718782; line-height: 1.8; }
+.role-option-icon { width: 19px; height: 19px; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
