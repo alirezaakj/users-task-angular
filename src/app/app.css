@@ -115,10 +115,6 @@ input, select {
   background: #fff;
 }
 .toolbar input { flex: 1; min-width: 200px; }
-.import-button { display: inline-flex; min-height: 42px; align-items: center; padding: 8px 12px; border-radius: 8px; color: #245b56; background: #e3efec; cursor: pointer; }
-.import-button input { display: none; }
-.csv-message { color: #286b64; }
-.backup-actions { display: flex; align-items: center; gap: 10px; margin: -8px 0 18px; color: #66817d; font-size: 13px; }
 
 .form-card { margin-bottom: 20px; padding: 22px; }
 form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }

@@ -77,27 +77,6 @@
     <button class="secondary-button" type="button" (click)="toggleSort()">
       مرتب‌سازی نام: {{ sortAscending ? 'الف تا ی' : 'ی تا الف' }}
     </button>
-    <button class="secondary-button" type="button" (click)="exportUsers()">
-      دریافت CSV
-    </button>
-    <label class="import-button">
-      واردکردن CSV
-      <input type="file" accept=".csv,text/csv" (change)="importUsers($event)" />
-    </label>
-  </section>
-
-  @if (csvMessage) {
-    <p class="csv-message" role="status">{{ csvMessage }}</p>
-  }
-  <section class="backup-actions" aria-label="پشتیبان‌گیری کاربران">
-    <button class="secondary-button" type="button" (click)="exportBackup()">
-      ذخیرهٔ پشتیبان JSON
-    </button>
-    <label class="import-button">
-      بازیابی از JSON
-      <input type="file" accept=".json,application/json" (change)="restoreBackup($event)" />
-    </label>
-    @if (backupMessage) { <span role="status">{{ backupMessage }}</span> }
   </section>
 
   @if (lastDeletedUser) {
